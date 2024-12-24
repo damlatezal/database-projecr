@@ -269,6 +269,36 @@ INSERT INTO Guests (FullName, Email, Phone, Address, DateOfBirth) VALUES
 ('Elif Öztürk', 'elif.ozturk@example.com', '5554567890', 'Bursa, Turkey', '1995-05-18'),
 ('Can Polat', 'can.polat@example.com', '5555678901', 'Antalya, Turkey', '1992-09-30');
 
+-- UPDATE 3 tuples in different tables
+
+UPDATE Guests
+SET FullName = 'Ahmet Can Yılmaz', Email = 'ahmet.can.yilmaz@example.com'
+WHERE GuestID = 1;
+
+UPDATE Rooms
+SET Status = 'Occupied'
+WHERE RoomID = 10; 
+
+UPDATE Payments
+SET AmountPaid = 4500.00, PaymentMethod = 'Credit Card'
+WHERE PaymentID = 2;
+
+-- DELETE 3 tuples in different tables
+
+SELECT * FROM Guests WHERE GuestID = 25;
+
+DELETE FROM Guests
+WHERE GuestID = 25;
+
+SELECT * FROM Guests WHERE GuestID = 15;
+select * from Bookings where GuestId=26;
+
+delete from Bookings
+where GuestID= 26;
+
+DELETE FROM Guests
+WHERE GuestID = 26;
+
 
 
   
