@@ -242,6 +242,33 @@ INSERT INTO ServiceUsage (BookingID, ServiceID, EmployeeID, UsageDate, Quantity,
 (24, 9, 6, '2025-01-07', 1, 7800.00),
 (25, 10, 8, '2025-01-08', 3, 1080.00);
 
+-- INSERT 3 tuples to different tables
+
+INSERT INTO Guests (FullName, Email, Phone, Address, DateOfBirth) VALUES
+('Selin Kaya', 'selin.kaya@example.com', '5552340987', 'Eskişehir, Turkey', '1993-04-22'),
+('Barış Gül', 'baris.gul@example.com', '5558905678', 'Muğla, Turkey', '1991-08-19'),
+('Nisa Acar', 'nisa.acar@example.com', '5554567891', 'Amasya, Turkey', '1997-12-12');
+
+INSERT INTO Rooms (RoomNumber, RoomType, PricePerNight, Status) VALUES
+('126', 'Single', 2000.00, 'Available'),
+('127', 'Double', 3000.00, 'Occupied'),
+('128', 'Suite', 5000.00, 'Available');
+
+INSERT INTO Bookings (GuestID, RoomID, RoomType, CheckInDate, CheckOutDate, TotalPrice) VALUES
+(26, 26, 'Single', '2024-01-30', '2024-02-02', 6000.00),
+(27, 27, 'Double', '2024-02-01', '2024-02-04', 9000.00),
+(28, 28, 'Suite', '2024-02-02', '2024-02-05', 15000.00);
+
+
+-- INSERT 5 tuples to same table
+
+INSERT INTO Guests (FullName, Email, Phone, Address, DateOfBirth) VALUES
+('Ahmet Yılmaz', 'ahmet.yilmaz@example.com', '5551234567', 'Istanbul, Turkey', '1985-03-14'),
+('Zeynep Çelik', 'zeynep.celik@example.com', '5552345678', 'Ankara, Turkey', '1990-07-21'),
+('Mehmet Demir', 'mehmet.demir@example.com', '5553456789', 'Izmir, Turkey', '1988-11-03'),
+('Elif Öztürk', 'elif.ozturk@example.com', '5554567890', 'Bursa, Turkey', '1995-05-18'),
+('Can Polat', 'can.polat@example.com', '5555678901', 'Antalya, Turkey', '1992-09-30');
+
 
 
   
