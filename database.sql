@@ -445,6 +445,103 @@ FROM Rooms;
 SELECT BookingID, TotalPrice, SQRT(TotalPrice) AS SquareRoot_Price
 FROM Bookings;
 
+ -- Create 7 queries with Date Functions
+ 
+ SELECT BookingID, GuestID, RoomID, CheckInDate
+FROM Bookings
+WHERE CheckInDate > CURDATE();
+
+SELECT GuestID, FullName, DateOfBirth, YEAR(DateOfBirth) AS BirthYear
+FROM Guests;
+
+SELECT BookingID, CheckOutDate, MONTH(CheckOutDate) AS CheckOutMonth
+FROM Bookings;
+
+SELECT BookingID, CheckInDate, DAY(CheckInDate) AS CheckInDay
+FROM Bookings;
+
+SELECT BookingID, CheckInDate, CheckOutDate, DATEDIFF(CheckOutDate, CheckInDate) AS BookingDuration
+FROM Bookings;
+
+SELECT BookingID, CheckOutDate, DATE_ADD(CheckOutDate, INTERVAL 1 DAY) AS NewCheckOutDate
+FROM Bookings;
+
+SELECT BookingID, CheckInDate, DATE_SUB(CheckInDate, INTERVAL 2 DAY) AS NewCheckInDate
+FROM Bookings;
+
+-- Create 3 queries with aggregate functions(COUNT, MIN, MAX, SUM, AVG)
+
+SELECT COUNT(*) AS TotalBookings
+FROM Bookings;
+
+SELECT
+MIN(PricePerNight) AS MinimumPrice,
+MAX(PricePerNight) AS MaximumPrice,
+AVG(PricePerNight) AS AveragePrice
+FROM Rooms;
+
+SELECT SUM(TotalPrice) AS TotalRevenue
+FROM Bookings;
+
+-- Use LIMIT clause
+SELECT RoomID, RoomNumber, RoomType, PricePerNight
+FROM Rooms
+ORDER BY PricePerNight DESC
+LIMIT 3;
+
+-- Use ROLLUP
+SELECT GuestID, COUNT(BookingID) AS TotalBookings
+FROM Bookings
+GROUP BY GuestID WITH ROLLUP;
+
+-- Queries by grouping 
+-- Create 3 queries with GROUP BY clause 
+SELECT RoomType, SUM(TotalPrice) AS TotalRevenue
+FROM Bookings
+GROUP BY RoomType;
+
+SELECT YEAR(DateOfBirth) AS BirthYear, COUNT(GuestID) AS NumberOfGuests
+FROM Guests
+GROUP BY YEAR(DateOfBirth);
+
+SELECT PaymentMethod, SUM(AmountPaid) AS TotalAmount
+FROM Payments
+GROUP BY PaymentMethod;
+
+-- Create 3 queries with aggregate functions(COUNT, MIN, MAX, SUM, AVG)
+
+SELECT RoomType, COUNT(BookingID) AS NumberOfBookings
+FROM Bookings
+GROUP BY RoomType;
+
+SELECT RoomType,
+MIN(PricePerNight) AS MinPrice,
+MAX(PricePerNight) AS MaxPrice,
+AVG(PricePerNight) AS AvgPrice
+FROM Rooms
+GROUP BY RoomType;
+
+SELECT GuestID, SUM(TotalPrice) AS TotalRevenue
+FROM Bookings
+GROUP BY GuestID;
+
+-- Create 3 queries with HAVING clause 
+
+SELECT RoomType, SUM(TotalPrice) AS TotalRevenue
+FROM Bookings
+GROUP BY RoomType
+HAVING SUM(TotalPrice) > 20000;
+
+SELECT PaymentMethod, SUM(AmountPaid) AS TotalPaid
+FROM Payments
+GROUP BY PaymentMethod
+HAVING SUM(AmountPaid) > 50000;
+
+SELECT GuestID, SUM(DATEDIFF(CheckOutDate, CheckInDate)) AS TotalStayDays
+FROM Bookings
+GROUP BY GuestID
+HAVING SUM(DATEDIFF(CheckOutDate, CheckInDate)) > 2;
+
 
 
   
