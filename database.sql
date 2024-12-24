@@ -299,6 +299,57 @@ where GuestID= 26;
 DELETE FROM Guests
 WHERE GuestID = 26;
 
+-- Add CHECK constraint
+
+ALTER TABLE ServiceUsage
+ADD CONSTRAINT chk_quantity CHECK (Quantity > 0);
+
+
+-- Create 3 queries with WHERE clause and comparison operators
+
+SELECT GuestID, FullName, DateOfBirth
+FROM Guests
+WHERE DateOfBirth < '1995-01-01';
+
+SELECT RoomID, RoomNumber, RoomType, PricePerNight
+FROM Rooms
+WHERE PricePerNight > 3000;
+
+SELECT PaymentID, BookingID, AmountPaid, PaymentMethod
+FROM Payments
+WHERE AmountPaid >= 10000
+AND PaymentMethod = 'Credit Card';
+
+
+-- Create 3 queries with WHERE clause and arithmetic operators
+
+SELECT RoomID, RoomNumber, RoomType, PricePerNight, Status
+FROM Rooms
+WHERE (PricePerNight + 500) > 3500;
+
+SELECT ServiceUsageID, BookingID, ServiceID, Quantity, TotalCost
+FROM ServiceUsage
+WHERE TotalCost < (Quantity * 1000);
+
+SELECT BookingID, GuestID, RoomID, TotalPrice
+FROM Bookings
+WHERE TotalPrice > (3 * (SELECT PricePerNight FROM Rooms WHERE Rooms.RoomID = Bookings.RoomID));
+
+
+-- Create 3 queries with WHERE clause and logical operators
+
+SELECT BookingID, GuestID, RoomID, TotalPrice, CheckOutDate
+FROM Bookings
+WHERE TotalPrice > 10000 AND CheckOutDate > '2024-01-15';
+
+SELECT RoomID, RoomNumber, RoomType, PricePerNight, Status
+FROM Rooms
+WHERE RoomType = 'Suite' OR PricePerNight < 3000;
+
+SELECT GuestID, FullName, Email
+FROM Guests
+WHERE NOT Email LIKE '%@example.com';
+
 
 
   
