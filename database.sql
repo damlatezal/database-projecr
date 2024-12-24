@@ -352,5 +352,100 @@ WHERE NOT Email LIKE '%@example.com';
 
 
 
+-- Create 3 queries with special operators (BETWEEN, IS NULL, LIKE, IN, EXISTS)
+SELECT BookingID, GuestID, RoomID, TotalPrice
+FROM Bookings
+WHERE TotalPrice BETWEEN 5000 AND 15000;
+
+SELECT GuestID, FullName, Email
+FROM Guests
+WHERE Email IS NULL;
+
+SELECT GuestID, FullName
+FROM Guests
+WHERE EXISTS (
+SELECT 1
+FROM Bookings
+WHERE Bookings.GuestID = Guests.GuestID AND Guests.GuestID = 5
+);
+
+
+
+-- Create 3 queries with ORDER BY clause 
+SELECT BookingID, GuestID, RoomID, CheckInDate, CheckOutDate, TotalPrice
+FROM Bookings
+ORDER BY CheckInDate ASC;
+
+SELECT GuestID, FullName, Email, Phone, DateOfBirth
+FROM Guests
+ORDER BY FullName DESC;
+
+SELECT RoomID, RoomNumber, RoomType, PricePerNight, Status
+FROM Rooms
+ORDER BY PricePerNight DESC, RoomNumber ASC;
+
+
+
+-- Create 3 queries with DISTINCT clause
+
+SELECT DISTINCT RoomType
+FROM Rooms;
+
+SELECT DISTINCT Status
+FROM Rooms;
+
+SELECT DISTINCT PaymentMethod
+FROM Payments; 
+
+
+
+-- Create 7 queries with String Functions
+SELECT GuestID, UPPER(FullName) AS FullName_Uppercase
+FROM Guests;
+
+SELECT GuestID, LOWER(Email) AS Email_Lowercase
+FROM Guests;
+
+SELECT GuestID, CONCAT(FullName, ' - ', Email) AS Guest_Info
+FROM Guests;
+
+SELECT RoomID, RoomType, SUBSTRING(RoomType, 1, 5) AS ShortRoomType
+FROM Rooms;
+
+SELECT GuestID, FullName, LENGTH(FullName) AS Name_Length
+FROM Guests;
+
+SELECT RoomID, TRIM(Status) AS Trimmed_Status
+FROM Rooms;
+
+SELECT GuestID, Email, REPLACE(Email, '@', '[at]') AS Obfuscated_Email
+FROM Guests;
+
+
+
+-- 	Create 7 queries with Numeric Functions
+SELECT BookingID, TotalPrice, ROUND(TotalPrice) AS Rounded_TotalPrice
+FROM Bookings;
+
+SELECT BookingID, TotalPrice, CEIL(TotalPrice) AS Ceil_TotalPrice
+FROM Bookings;
+
+SELECT BookingID, TotalPrice, FLOOR(TotalPrice) AS Floor_TotalPrice
+FROM Bookings;
+
+SELECT ServiceUsageID, TotalCost, ABS(TotalCost - 5000) AS Absolute_CostDifference
+FROM ServiceUsage;
+
+SELECT RoomID, PricePerNight, MOD(PricePerNight, 500) AS Remainder
+FROM Rooms;
+
+SELECT RoomID, PricePerNight, POWER(PricePerNight, 2) AS Squared_Price
+FROM Rooms;
+
+SELECT BookingID, TotalPrice, SQRT(TotalPrice) AS SquareRoot_Price
+FROM Bookings;
+
+
+
   
 
