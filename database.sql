@@ -242,6 +242,7 @@ INSERT INTO ServiceUsage (BookingID, ServiceID, EmployeeID, UsageDate, Quantity,
 (24, 9, 6, '2025-01-07', 1, 7800.00),
 (25, 10, 8, '2025-01-08', 3, 1080.00);
 
+
 -- INSERT 3 tuples to different tables
 
 INSERT INTO Guests (FullName, Email, Phone, Address, DateOfBirth) VALUES
@@ -270,7 +271,6 @@ INSERT INTO Guests (FullName, Email, Phone, Address, DateOfBirth) VALUES
 ('Can Polat', 'can.polat@example.com', '5555678901', 'Antalya, Turkey', '1992-09-30');
 
 -- UPDATE 3 tuples in different tables
-
 UPDATE Guests
 SET FullName = 'Ahmet Can Yılmaz', Email = 'ahmet.can.yilmaz@example.com'
 WHERE GuestID = 1;
@@ -284,7 +284,6 @@ SET AmountPaid = 4500.00, PaymentMethod = 'Credit Card'
 WHERE PaymentID = 2;
 
 -- DELETE 3 tuples in different tables
-
 SELECT * FROM Guests WHERE GuestID = 25;
 
 DELETE FROM Guests
@@ -304,7 +303,6 @@ WHERE GuestID = 26;
 ALTER TABLE ServiceUsage
 ADD CONSTRAINT chk_quantity CHECK (Quantity > 0);
 
-
 -- Create 3 queries with WHERE clause and comparison operators
 
 SELECT GuestID, FullName, DateOfBirth
@@ -320,7 +318,6 @@ FROM Payments
 WHERE AmountPaid >= 10000
 AND PaymentMethod = 'Credit Card';
 
-
 -- Create 3 queries with WHERE clause and arithmetic operators
 
 SELECT RoomID, RoomNumber, RoomType, PricePerNight, Status
@@ -335,7 +332,6 @@ SELECT BookingID, GuestID, RoomID, TotalPrice
 FROM Bookings
 WHERE TotalPrice > (3 * (SELECT PricePerNight FROM Rooms WHERE Rooms.RoomID = Bookings.RoomID));
 
-
 -- Create 3 queries with WHERE clause and logical operators
 
 SELECT BookingID, GuestID, RoomID, TotalPrice, CheckOutDate
@@ -349,8 +345,6 @@ WHERE RoomType = 'Suite' OR PricePerNight < 3000;
 SELECT GuestID, FullName, Email
 FROM Guests
 WHERE NOT Email LIKE '%@example.com';
-
-
 
 -- Create 3 queries with special operators (BETWEEN, IS NULL, LIKE, IN, EXISTS)
 SELECT BookingID, GuestID, RoomID, TotalPrice
@@ -369,8 +363,6 @@ FROM Bookings
 WHERE Bookings.GuestID = Guests.GuestID AND Guests.GuestID = 5
 );
 
-
-
 -- Create 3 queries with ORDER BY clause 
 SELECT BookingID, GuestID, RoomID, CheckInDate, CheckOutDate, TotalPrice
 FROM Bookings
@@ -384,8 +376,6 @@ SELECT RoomID, RoomNumber, RoomType, PricePerNight, Status
 FROM Rooms
 ORDER BY PricePerNight DESC, RoomNumber ASC;
 
-
-
 -- Create 3 queries with DISTINCT clause
 
 SELECT DISTINCT RoomType
@@ -396,8 +386,6 @@ FROM Rooms;
 
 SELECT DISTINCT PaymentMethod
 FROM Payments; 
-
-
 
 -- Create 7 queries with String Functions
 SELECT GuestID, UPPER(FullName) AS FullName_Uppercase
@@ -421,8 +409,6 @@ FROM Rooms;
 SELECT GuestID, Email, REPLACE(Email, '@', '[at]') AS Obfuscated_Email
 FROM Guests;
 
-
-
 -- 	Create 7 queries with Numeric Functions
 SELECT BookingID, TotalPrice, ROUND(TotalPrice) AS Rounded_TotalPrice
 FROM Bookings;
@@ -444,7 +430,7 @@ FROM Rooms;
 
 SELECT BookingID, TotalPrice, SQRT(TotalPrice) AS SquareRoot_Price
 FROM Bookings;
-
+ 
  -- Create 7 queries with Date Functions
  
  SELECT BookingID, GuestID, RoomID, CheckInDate
@@ -542,7 +528,225 @@ FROM Bookings
 GROUP BY GuestID
 HAVING SUM(DATEDIFF(CheckOutDate, CheckInDate)) > 2;
 
+-- Create a query by LEFT JOIN
+SELECT
+Guests.GuestID,
+Guests.FullName,
+Bookings.BookingID,
+Bookings.RoomID,
+Bookings.TotalPrice
+FROM
+Guests
+LEFT JOIN
+Bookings
+ON
+Guests.GuestID = Bookings.GuestID;
+
+-- Create a query by RIGHT JOIN
+SELECT
+Bookings.BookingID,
+Bookings.RoomID,
+Bookings.TotalPrice,
+Guests.GuestID,
+Guests.FullName
+FROM
+Bookings
+RIGHT JOIN
+Guests
+ON
+Guests.GuestID = Bookings.GuestID;
+
+-- Create 3 queries with Joining 2 tables
+SELECT
+Bookings.BookingID,
+Guests.FullName,
+Bookings.RoomID,
+Bookings.CheckInDate,
+Bookings.CheckOutDate,
+Bookings.TotalPrice
+FROM
+Bookings
+INNER JOIN
+Guests
+ON
+Bookings.GuestID = Guests.GuestID;
+
+-- Create 3 queries with Joining 3 tables
+
+SELECT
+Bookings.BookingID,
+Guests.FullName,
+Rooms.RoomNumber,
+Rooms.RoomType,
+Bookings.CheckInDate,
+Bookings.CheckOutDate,
+Bookings.TotalPrice
+FROM
+Bookings
+INNER JOIN
+Guests
+ON
+Bookings.GuestID = Guests.GuestID
+INNER JOIN
+Rooms
+ON
+Bookings.RoomID = Rooms.RoomID;
+
+--  Create 3 queries with subquery in WHERE clause
+SELECT GuestID, FullName, Email
+FROM Guests
+WHERE GuestID IN (
+SELECT GuestID
+FROM Bookings
+);
+
+SELECT BookingID, GuestID, RoomID, TotalPrice
+FROM Bookings
+WHERE TotalPrice > (
+SELECT AVG(TotalPrice)
+FROM Bookings
+);
+
+SELECT RoomID, RoomNumber, RoomType, Status
+FROM Rooms
+WHERE RoomID NOT IN (
+SELECT RoomID
+FROM Bookings
+);
+
+-- Create 3 queries with subquery in SELECT columns 
+
+SELECT
+GuestID,
+FullName,
+(SELECT COUNT(*) FROM Bookings WHERE Bookings.GuestID = Guests.GuestID) AS TotalBookings
+FROM Guests;
+
+SELECT
+RoomID,
+RoomNumber,
+Status,
+(SELECT COUNT(*) FROM Bookings WHERE Bookings.RoomID = Rooms.RoomID) AS BookingCount
+FROM Rooms;
+ SELECT
+PaymentID,
+AmountPaid,
+PaymentMethod,
+(SELECT FullName FROM Guests WHERE Guests.GuestID = (SELECT GuestID FROM Bookings WHERE Bookings.BookingID = Payments.BookingID)) AS GuestName
+FROM Payments;
+
+-- Copy one table structure and data to new table
+CREATE TABLE BookingsBackup AS
+SELECT *
+FROM Bookings;
+
+-- Create a VIEW
+CREATE VIEW GuestBookingDetails AS
+SELECT
+Guests.GuestID,
+Guests.FullName,
+Bookings.BookingID,
+Bookings.RoomID,
+Bookings.CheckInDate,
+Bookings.CheckOutDate,
+Bookings.TotalPrice
+FROM
+Guests
+INNER JOIN
+Bookings
+ON
+Guests.GuestID = Bookings.GuestID;
+
+SELECT *
+FROM GuestBookingDetails
+
+-- Create a stored procedure and call it
+
+DELIMITER $$
+
+CREATE PROCEDURE GetGuestBookings(IN GuestIDInput INT)
+BEGIN
+SELECT
+Bookings.BookingID,
+Bookings.RoomID,
+Bookings.CheckInDate,
+Bookings.CheckOutDate,
+Bookings.TotalPrice
+FROM
+Bookings
+WHERE
+GuestID = GuestIDInput;
+END $$
+
+DELIMITER ;
+CALL GetGuestBookings(1);
+
+-- Create 3 triggers and use it, give examples in order to execute trigger
+
+DELIMITER $$
+
+CREATE TABLE BookingLogs (
+LogID INT PRIMARY KEY AUTO_INCREMENT,
+BookingID INT NOT NULL,
+GuestID INT NOT NULL,
+RoomID INT NOT NULL,
+Action VARCHAR(50) NOT NULL,
+LogDateTime DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+DELIMITER //
+CREATE TRIGGER after_booking_insert
+AFTER INSERT ON Bookings
+FOR EACH ROW
+BEGIN
+INSERT INTO BookingLogs (BookingID, GuestID, RoomID, Action)
+VALUES (NEW.BookingID, NEW.GuestID, NEW.RoomID, 'INSERTED');
+END //
+DELIMITER ;
+INSERT INTO Bookings (GuestID, RoomID, RoomType, CheckInDate, CheckOutDate, TotalPrice)
+VALUES (5, 10, 'Double', '2024-02-01', '2024-02-03', 6000.00);
+
+SELECT * FROM BookingLogs;
 
 
-  
+DELIMITER //
+CREATE TRIGGER after_booking_insert_update_room_status
+AFTER INSERT ON Bookings
+FOR EACH ROW
+BEGIN
+UPDATE Rooms
+SET Status = 'Occupied'
+WHERE RoomID = NEW.RoomID;
+END //
+DELIMITER ;
 
+INSERT INTO Bookings (GuestID, RoomID, RoomType, CheckInDate, CheckOutDate, TotalPrice)
+VALUES (6, 12, 'Suite', '2024-02-05', '2024-02-07', 10000.00);
+
+SELECT RoomID, Status FROM Rooms WHERE RoomID = 12;
+
+DELIMITER //
+CREATE TRIGGER before_booking_insert
+BEFORE INSERT ON Bookings
+FOR EACH ROW
+BEGIN
+DECLARE overlap_count INT;
+SELECT COUNT(*) INTO overlap_count
+FROM Bookings
+WHERE RoomID = NEW.RoomID
+AND (
+(NEW.CheckInDate BETWEEN CheckInDate AND CheckOutDate)
+OR (NEW.CheckOutDate BETWEEN CheckInDate AND CheckOutDate)
+OR (CheckInDate BETWEEN NEW.CheckInDate AND NEW.CheckOutDate)
+);
+IF overlap_count > 0 THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Room is already booked for the selected dates.';
+END IF;
+END //
+DELIMITER ;
+
+INSERT INTO Bookings (GuestID, RoomID, RoomType, CheckInDate, CheckOutDate, TotalPrice)
+VALUES (6, 10, 'Double', '2024-02-03', '2024-02-06', 6000.00);
+
+INSERT INTO Bookings (GuestID, RoomID, RoomType, CheckInDate, CheckOutDate, TotalPrice)
+VALUES (7, 10, 'Double', '2024-02-06', '2024-02-10', 8000.00);
